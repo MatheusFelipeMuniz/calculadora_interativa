@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .fundo{
+            justify-content: center;
+            display: fl;
+            background-image: linear-gradient(45deg, rgb(22, 16, 16), rgb(228, 15, 61));
+            height: 100vh; /* agora sempre vai ocupar toda a visão */
+            color: white; /* Define a cor da fonte */
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center; /* coloca todos os textos dentro da class no centro */
+        } /*chamei a class fundo do html com um . no css */
+        .calculadora{
+            position: absolute; /* Assim ela vai ocupar apenas o espaço dela mesma */
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 50%; /* vai ficar na metade da tela */
+            left: 50%; /* vai ficar na metade da tela */
+            transform: translate(-50%,-50%); /* para alinhar a calculadora */
+            border-radius: 15px; /* arredonda as bordas */
+            padding: 15px; /* é a margem interna */
+            transition: transform 300ms;
+
+        } /*chamei a class calculadora do html com um . no css */
+        .botao {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer; /* para aparecer o cursor clicável */
+            background-color: rgb(37, 37, 37);
+            border: none;
+            color: white;
+            margin: 3px;
+        } /*chamei a class botao do html com um . no css */
+        .botao:hover {
+            background-color: rgb(255, 124, 146);
+        } /* chamei a class botão novamente mas referindo a função */
+        #bigual {
+            height: 106px;
+        }
+        #bzero {
+            width: 106px;
+        }
+        #resultado {
+            padding: 5px;
+            text-align: right;
+            font-size: 25px;
+            margin: 5px;
+            width: 212px;
+            height: 30px;
+            background-color: white;
+            color: black;
+            overflow-x: auto; /* não vai deixar os números vazarem da div */
+            overflow-y: hidden; /* tirei o scroll do eixo y */
+        } /* chamei o id do html com um # no css */
+        
+        /* barra de rolagem */
+        ::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        /* Trilha da barra de rolagem */
+        ::-webkit-scrollbar-track {
+            background-color: gray;
+        }
+        
+        /* Alça da barra de rolagem*/
+        ::-webkit-scrollbar-thumb {
+            background-color: rgb(255, 124, 146);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: rgb(187, 47, 47);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="fundo">
+        <h1 style="padding: 30px;">MATHEUS MUNIZ</h1>
+        <div class="calculadora">
+            <h1>Calculadora</h1>
+            <p id="resultado"></p>
+            <table> <!--Para criar uma tabela-->
+                <tr> <!--Para criar cada linha da tabela-->
+                    <td><button class="botao" onclick="clean()">C</button></td> <!--Cada elemento da linha-->
+                    <td><button class="botao" onclick="back()"><</button></td>
+                    <td><button class="botao" onclick="insert('/')">/</button></td>
+                    <td><button class="botao" onclick="insert('*')">X</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('7')">7</button></td>
+                    <td><button class="botao" onclick="insert('8')">8</button></td>
+                    <td><button class="botao" onclick="insert('9')">9</button></td>
+                    <td><button class="botao" onclick="insert('-')">-</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('4')">4</button></td>
+                    <td><button class="botao" onclick="insert('5')">5</button></td>
+                    <td><button class="botao" onclick="insert('6')">6</button></td>
+                    <td><button class="botao" onclick="insert('+')">+</button></td>
+                </tr>
+                <tr>
+                    <td><button class="botao" onclick="insert('1')">1</button></td>
+                    <td><button class="botao" onclick="insert('2')">2</button></td>
+                    <td><button class="botao" onclick="insert('3')">3</button></td>
+                    <td rowspan="2"><button class="botao" id="bigual" onclick="calcular()">=</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><button class="botao" id="bzero" onclick="insert('0')">0</button></td>
+                    <td><button class="botao" onclick="insert('.')">.</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script> // como é um programa simples, aqui vai ficar toda a lógica js //
+        function insert(num) {
+            var numero = document.getElementById('resultado').innerHTML
+            document.getElementById('resultado').innerHTML = numero + num
+        }
+        function clean() {
+            document.getElementById('resultado').innerHTML = ''
+        }
+        function back() {
+            var resultado = document.getElementById('resultado').innerHTML
+            document.getElementById('resultado').innerHTML = resultado.substring(0, resultado.length -1)
+        }
+        function calcular() {
+            var resultado = document.getElementById('resultado').innerHTML
+            if(resultado) {
+                document.getElementById('resultado').innerHTML = eval(resultado)
+            }
+            else {
+                document.getElementById('resultado').innerHTML = 'Digite...'
+            }
+        }
+
+        const card = document.querySelector('.calculadora')
+        card.addEventListener("mousemove", cardEffect)
+        card.addEventListener("mouseLeave", cardBack)
+
+        function cardEffect(event) {
+            const cardWidth = card.offsetWidth;
+            const cardHeight = card.offsetHeight;
+            const centerX = card.offsetLeft + cardWidth/2
+            const centerY = card.offsetTop + cardHeight/2
+            const positionX = event.clientX - centerX
+            const positionY = event.clientY - centerY
+            console.log(positionX,positionY)
+
+            const rotateX = (+1)*25*positionY/(cardHeight/2)
+            const rotateY = (-1)*25*positionX/(cardWidth/2)
+
+            card.style.transform = `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
+        }
+
+        function cardBack(event) {
+            card.style.transform = `perspective(500px) rotateX(0deg) rotateY(0deg)`;
+        }
+    </script>
+</body>
+</html>
